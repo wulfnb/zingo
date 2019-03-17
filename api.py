@@ -1,5 +1,6 @@
 from webob import Request, Response
 from parse import parse
+import inspect
 
 
 class API:
@@ -7,11 +8,16 @@ class API:
         self.routes = {}
 
     def route(self, path):
+        # if path in self.routes:
+        #     raise AssertionError("Such route already exists.")
+        assert path not in self.routes, "Such route already exists."
+
         def wrapper(handler):
             self.routes[path] = handler
             return handler
 
         return wrapper
+
     def __call__(self, environ, start_response):
         request = Request(environ)
         response = self.handle_request(request)
@@ -20,9 +26,15 @@ class API:
 
     def handle_request(self, request):
         response = Response()
+
         handler, kwargs = self.find_handler(request_path=request.path)
 
         if handler is not None:
+            if inspect.isclass(handler):
+                handler = getattr(handler(), request.method.lower(), None)
+                if handler is None:
+                    raise AttributeError("Method now allowed", request.method)
+
             handler(request, response, **kwargs)
         else:
             self.default_response(response)

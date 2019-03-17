@@ -1,5 +1,4 @@
-#!/home/wolverine/Documents/z/zingo/venv/bin/python3
-
+#!/home/wolf/Desktop/projects/zingo/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

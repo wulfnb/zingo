@@ -16,3 +16,14 @@ def about(request, response):
 @app.route("/hello/{name}")
 def greeting(request, response, name):
     response.text = f"Hello, {name}"
+
+@app.route("/book")
+class BooksHandler:
+    def get(self, req, resp):
+        resp.text = "Books Page"
+
+    def post(self, req, resp):
+        resp.text = "Endpoint to create a book"
+
+    def put(self, req, resp):
+        resp.text = "This is a put request"
